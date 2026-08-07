@@ -1,0 +1,17 @@
+COMO TESTAR LOCALMENTE
+
+1. Extraia TODO o ZIP para uma pasta.
+2. Não mova index.html sozinho.
+3. Na mesma pasta devem existir:
+   - index.html
+   - style.css
+   - admin.html
+   - admin.css
+   - pasta assets
+   - pasta js
+4. Dê dois cliques em index.html.
+5. O site deve abrir com bege, verde e laranja, logo e layout completo.
+
+IMPORTANTE:
+Se abrir apenas o index.html fora da pasta, o design não carregará.
+O arquivo depende de style.css, assets/ e js/ ao lado dele.
