@@ -1,9 +1,132 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin | Soul Vídeo Histórias</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="admin.css"></head><body>
-<div id="login" class="login"><img src="assets/logo.png"><h1>Painel Soul</h1><input id="email" type="email" placeholder="E-mail"><input id="password" type="password" placeholder="Senha"><button id="loginBtn">Entrar</button><p id="loginMsg"></p></div>
-<div id="panel" hidden><aside><img src="assets/logo.png"><button data-tab="home">Início</button><button data-tab="about">Quem Somos</button><button data-tab="events">Galeria / Eventos</button><button data-tab="testimonials">Depoimentos</button><button id="logout">Sair</button></aside><main>
-<section id="home" class="tab"><h1>Início</h1><label>Frase principal<input id="hTitle"></label><label>Texto<textarea id="hText"></textarea></label><label>Foto ou vídeo de fundo<input id="hMedia" type="file" accept="image/*,video/*"></label><button id="saveHome">Salvar Início</button></section>
-<section id="about" class="tab" hidden><h1>Quem Somos</h1><label>Título<input id="aTitle"></label><label>Texto<textarea id="aText"></textarea></label><label>Foto grande<input id="aLarge" type="file" accept="image/*"></label><label>Foto pequena 1<input id="a1" type="file" accept="image/*"></label><label>Foto pequena 2<input id="a2" type="file" accept="image/*"></label><label>Foto pequena 3<input id="a3" type="file" accept="image/*"></label><button id="saveAbout">Salvar Quem Somos</button></section>
-<section id="events" class="tab" hidden><h1>Galeria</h1><p>Adicione quantos eventos quiser. Cada evento tem texto, vídeo do YouTube e até quatro fotos.</p><div class="grid"><label>Categoria<select id="eCat"><option>Casamento</option><option>15 anos</option></select></label><label>Submenu<select id="eSub"><option>Teaser</option><option>Save the Date</option></select></label></div><label>Título do evento<input id="eTitle"></label><label>Texto<textarea id="eText"></textarea></label><label>Link do YouTube<input id="eYoutube" placeholder="https://youtube.com/..."></label><div class="grid4"><label>Foto 1<input class="eventPhoto" type="file" accept="image/*"></label><label>Foto 2<input class="eventPhoto" type="file" accept="image/*"></label><label>Foto 3<input class="eventPhoto" type="file" accept="image/*"></label><label>Foto 4<input class="eventPhoto" type="file" accept="image/*"></label></div><button id="addEvent">Adicionar evento</button><div id="eventList"></div></section>
-<section id="testimonials" class="tab" hidden><h1>Depoimentos</h1><label>Nome<input id="tName"></label><label>Texto<textarea id="tText"></textarea></label><label>Foto ou vídeo<input id="tMedia" type="file" accept="image/*,video/*"></label><button id="addTestimonial">Adicionar depoimento</button><div id="testimonialList"></div></section>
-<p id="status"></p></main></div>
-<script src="js/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/admin.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin | Soul Vídeo Histórias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="login" class="login-shell">
+  <div class="login-card">
+    <img src="assets/logo.png" alt="Soul Vídeo Histórias">
+    <p class="eyebrow">Área administrativa</p>
+    <h1>Painel Soul</h1>
+    <label>E-mail<input id="email" type="email" autocomplete="username" placeholder="seu@email.com"></label>
+    <label>Senha<input id="password" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+    <button id="loginBtn">Entrar</button>
+    <p id="loginMsg" class="message"></p>
+  </div>
+</div>
+
+<div id="panel" class="admin-layout" hidden>
+  <aside class="sidebar">
+    <img class="admin-logo" src="assets/logo.png" alt="Soul Vídeo Histórias">
+    <p>Conteúdo do site</p>
+    <button class="nav-btn active" data-tab="home">Início</button>
+    <button class="nav-btn" data-tab="about">Quem Somos</button>
+    <button class="nav-btn" data-tab="mission">Nossa Missão</button>
+    <button class="nav-btn" data-tab="events">Galeria / Eventos</button>
+    <button class="nav-btn" data-tab="testimonials">Depoimentos</button>
+    <button class="nav-btn" data-tab="settings">Contato e Redes</button>
+    <div class="sidebar-spacer"></div>
+    <a href="/" target="_blank">Ver site ↗</a>
+    <button id="logout" class="logout">Sair</button>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-top">
+      <div><p class="eyebrow">Soul Vídeo Histórias</p><h1>Gerenciar conteúdo</h1></div>
+      <p id="status" class="status"></p>
+    </div>
+
+    <section id="home" class="tab card">
+      <div class="card-head"><div><p class="eyebrow">Página inicial</p><h2>Início</h2></div><span>01</span></div>
+      <label>Frase principal<input id="hTitle"></label>
+      <label>Texto<textarea id="hText" rows="4"></textarea></label>
+      <label>URL da foto ou vídeo de fundo<input id="hMedia" type="url" placeholder="https://..."></label>
+      <p class="hint">Cole uma URL pública de imagem ou vídeo. Para vídeo, prefira MP4/WebM.</p>
+      <button class="primary" id="saveHome">Salvar Início</button>
+    </section>
+
+    <section id="about" class="tab card" hidden>
+      <div class="card-head"><div><p class="eyebrow">Institucional</p><h2>Quem Somos</h2></div><span>02</span></div>
+      <label>Título<input id="aTitle"></label>
+      <label>Texto<textarea id="aText" rows="6"></textarea></label>
+      <div class="form-grid two">
+        <label>URL da foto grande<input id="aLarge" type="url" placeholder="https://..."></label>
+        <label>URL da foto pequena 1<input id="a1" type="url" placeholder="https://..."></label>
+        <label>URL da foto pequena 2<input id="a2" type="url" placeholder="https://..."></label>
+        <label>URL da foto pequena 3<input id="a3" type="url" placeholder="https://..."></label>
+      </div>
+      <button class="primary" id="saveAbout">Salvar Quem Somos</button>
+    </section>
+
+    <section id="mission" class="tab card" hidden>
+      <div class="card-head"><div><p class="eyebrow">Propósito</p><h2>Nossa Missão</h2></div><span>03</span></div>
+      <label>Título<input id="mTitle"></label>
+      <label>Texto<textarea id="mText" rows="6"></textarea></label>
+      <div class="form-grid two">
+        <label>URL da foto 1<input id="m1" type="url" placeholder="https://..."></label>
+        <label>URL da foto 2<input id="m2" type="url" placeholder="https://..."></label>
+        <label>URL da foto 3<input id="m3" type="url" placeholder="https://..."></label>
+        <label>URL da foto 4<input id="m4" type="url" placeholder="https://..."></label>
+      </div>
+      <button class="primary" id="saveMission">Salvar Nossa Missão</button>
+    </section>
+
+    <section id="events" class="tab card" hidden>
+      <div class="card-head"><div><p class="eyebrow">Portfólio</p><h2>Galeria / Eventos</h2></div><span>04</span></div>
+      <div class="form-grid two">
+        <label>Categoria<select id="eCat">
+          <option>Casamento</option><option>15 anos</option><option>Corporativo</option>
+        </select></label>
+        <label>Subcategoria<select id="eSub"></select></label>
+      </div>
+      <label>Título do evento<input id="eTitle"></label>
+      <label>Texto<textarea id="eText" rows="5"></textarea></label>
+      <div class="repeat-box">
+        <div class="repeat-head"><strong>Vídeos do YouTube</strong><button type="button" id="addVideoField" class="secondary">+ Adicionar vídeo</button></div>
+        <div id="videoFields"></div>
+      </div>
+      <div class="repeat-box">
+        <div class="repeat-head"><strong>Fotos por URL</strong><button type="button" id="addPhotoField" class="secondary">+ Adicionar foto</button></div>
+        <div id="photoFields"></div>
+      </div>
+      <button class="primary" id="addEvent">Adicionar evento</button>
+      <div class="list-wrap"><h3>Eventos cadastrados</h3><div id="eventList"></div></div>
+    </section>
+
+    <section id="testimonials" class="tab card" hidden>
+      <div class="card-head"><div><p class="eyebrow">Clientes</p><h2>Depoimentos</h2></div><span>05</span></div>
+      <label>Nome<input id="tName"></label>
+      <label>Texto<textarea id="tText" rows="5"></textarea></label>
+      <div class="form-grid two">
+        <label>Tipo de mídia<select id="tMediaType"><option value="photo">Foto</option><option value="video">Vídeo</option></select></label>
+        <label>URL da foto ou vídeo<input id="tMedia" type="url" placeholder="https://..."></label>
+      </div>
+      <label>URL de foto horizontal complementar (opcional)<input id="tHorizontal" type="url" placeholder="https://..."></label>
+      <button class="primary" id="addTestimonial">Adicionar depoimento</button>
+      <div class="list-wrap"><h3>Depoimentos cadastrados</h3><div id="testimonialList"></div></div>
+    </section>
+
+    <section id="settings" class="tab card" hidden>
+      <div class="card-head"><div><p class="eyebrow">Contato</p><h2>Redes e WhatsApp</h2></div><span>06</span></div>
+      <label>Link do WhatsApp<input id="sWhatsapp" type="url" placeholder="https://wa.me/..."></label>
+      <label>Instagram principal<input id="sInstagram" type="url" placeholder="https://instagram.com/..."></label>
+      <label>Texto do Instagram principal<input id="sInstagramLabel" placeholder="@soul.videohistorias"></label>
+      <label>Instagram 15 anos<input id="sInstagram15" type="url" placeholder="https://instagram.com/..."></label>
+      <label>Texto do Instagram 15 anos<input id="sInstagram15Label" placeholder="@soul15anos"></label>
+      <button class="primary" id="saveSettings">Salvar Contato e Redes</button>
+    </section>
+  </main>
+</div>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

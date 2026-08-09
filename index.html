@@ -1,304 +1,147 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Soul Vídeo Histórias | Filmes que guardam sentimentos</title>
-  <meta name="description" content="Filmes de casamento e 15 anos com identidade, emoção e delicadeza.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Soul Vídeo Histórias — filmes de casamento, 15 anos e histórias que merecem ser lembradas.">
+  <meta name="theme-color" content="#203126">
+  <title>Soul Vídeo Histórias | Histórias que o tempo não apaga</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#inicio"><img src="assets/logo.png" alt="Soul Vídeo Histórias"></a>
-  <button class="mobile-toggle" aria-label="Abrir menu">☰</button>
-  <nav class="nav">
-    <a href="#inicio">Início</a><a href="#quem-somos">Quem Somos</a><a href="#galeria">Galeria</a>
-    <a href="#depoimentos">Depoimentos</a><a href="#contato">Contato</a>
+<header class="topbar" id="topbar">
+  <a class="brand" href="#inicio" aria-label="Soul Vídeo Histórias">
+    <img src="assets/logo.png" alt="Soul Vídeo Histórias">
+  </a>
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+  <nav class="nav" id="mainNav">
+    <a href="#inicio">Início</a>
+    <a href="#quem-somos">Quem Somos</a>
+    <a href="#missao">Nossa Missão</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#depoimentos">Depoimentos</a>
+    <a href="#contato">Contato</a>
   </nav>
-  <div class="social-top">
-    <a href="https://www.instagram.com/soul.videohistorias/?hl=pt-br" target="_blank" rel="noopener">Instagram Eventos</a>
-    <a href="https://www.instagram.com/soul15anos/?hl=pt-br" target="_blank" rel="noopener">Instagram 15</a>
-    <a class="whatsapp" href="https://wa.me/5532988442521" target="_blank" rel="noopener">WhatsApp</a>
-  </div>
+  <a class="top-cta" id="topWhatsapp" href="https://wa.me/5532988442521" target="_blank" rel="noopener">Conversar</a>
 </header>
 
 <main>
-<section id="inicio" class="hero">
-  <div id="heroMedia" class="hero-media"></div>
-  <div class="hero-shade"></div>
-  <div class="hero-content reveal">
-    <img class="hero-symbol" src="assets/simbolo.png" alt="">
-    <p class="eyebrow">Soul Vídeo Histórias</p>
-    <h1 id="homeTitle">Histórias que o tempo não apaga.</h1>
-    <p id="homeText">Transformamos momentos únicos em filmes com identidade, emoção e verdade.</p>
-    <a class="btn" href="#galeria">Conheça nossas histórias</a>
-  </div>
-</section>
-
-<section id="quem-somos" class="section about">
-  <div class="section-copy reveal">
-    <p class="eyebrow">Nossa essência</p><h2 id="aboutTitle">Quem Somos</h2>
-    <p id="aboutText">Cada história merece ser contada de um jeito único. Criamos filmes que carregam a personalidade, os detalhes e os sentimentos de cada pessoa.</p>
-  </div>
-  <div class="about-grid reveal">
-    <img id="aboutLarge" class="about-large placeholder" alt="Foto principal Quem Somos">
-    <div class="about-small">
-      <img id="about1" class="placeholder" alt=""><img id="about2" class="placeholder" alt=""><img id="about3" class="placeholder" alt="">
+  <section id="inicio" class="hero">
+    <div id="heroMedia" class="hero-media" aria-hidden="true"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content reveal">
+      <img class="hero-symbol" src="assets/simbolo.png" alt="">
+      <p class="kicker">Soul Vídeo Histórias</p>
+      <h1 id="homeTitle">Histórias que o tempo não apaga.</h1>
+      <p id="homeText">Transformamos momentos únicos em filmes com identidade, emoção e verdade.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#galeria">Conheça nossas histórias</a>
+        <a class="btn btn-ghost" href="#contato">Fale com a Soul</a>
+      </div>
     </div>
-  </div>
-</section>
+    <a class="scroll-hint" href="#quem-somos" aria-label="Ir para Quem Somos">↓</a>
+  </section>
 
-<section class="signature">
-  <img src="assets/simbolo.png" alt=""><p>Imagem, memória e sentimento em movimento.</p>
-</section>
-
-<section id="galeria" class="section gallery">
-  <div class="section-heading reveal"><p class="eyebrow">Portfólio</p><h2>Galeria</h2><p>Escolha uma história para assistir.</p></div>
-  <div class="gallery-shell">
-    <aside class="gallery-menu reveal">
-      <button class="accordion">Casamentos <span>+</span></button>
-      <div class="submenu"><button data-category="Casamento" data-sub="Teaser">Teaser</button><button data-category="Casamento" data-sub="Save the Date">Save the Date</button></div>
-      <button class="accordion">15 Anos <span>+</span></button>
-      <div class="submenu"><button data-category="15 anos" data-sub="Teaser">Teaser</button><button data-category="15 anos" data-sub="Save the Date">Save the Date</button></div>
-    </aside>
-    <div id="portfolioContent" class="portfolio-content reveal">
-      <div class="empty-state"><img src="assets/simbolo.png" alt=""><h3>Escolha uma categoria</h3><p>Os eventos cadastrados no painel aparecerão aqui, sem limite de quantidade.</p></div>
+  <section id="quem-somos" class="section about">
+    <div class="section-intro reveal">
+      <p class="kicker">Nossa essência</p>
+      <h2 id="aboutTitle">Quem Somos</h2>
+      <p id="aboutText">Há mais de duas décadas, transformamos sentimentos em imagens e histórias em memória.</p>
     </div>
-  </div>
-</section>
+    <div class="about-layout reveal">
+      <figure class="about-main-frame">
+        <img id="aboutLarge" class="media-placeholder" alt="Foto principal Quem Somos">
+      </figure>
+      <div class="about-thumbs">
+        <figure><img id="about1" class="media-placeholder" alt=""></figure>
+        <figure><img id="about2" class="media-placeholder" alt=""></figure>
+        <figure><img id="about3" class="media-placeholder" alt=""></figure>
+      </div>
+    </div>
+    <div class="experience reveal">
+      <span class="experience-number">21</span>
+      <span class="experience-copy">anos contando<br>histórias em movimento</span>
+    </div>
+  </section>
 
-<section id="depoimentos" class="section testimonials">
-  <div class="section-heading reveal"><p class="eyebrow">Palavras que ficam</p><h2>Depoimentos</h2></div>
-  <div id="testimonialsGrid" class="testimonial-grid"><p class="muted">Os depoimentos cadastrados no painel aparecerão aqui.</p></div>
-</section>
+  <section id="missao" class="section mission">
+    <div class="mission-copy reveal">
+      <p class="kicker">O que nos move</p>
+      <h2 id="missionTitle">Nossa Missão</h2>
+      <p id="missionText">Registrar com sensibilidade aquilo que passa depressa, para que a emoção permaneça viva por muitos anos.</p>
+    </div>
+    <div class="mission-grid reveal">
+      <figure class="mission-card mission-card-tall"><img id="mission1" class="media-placeholder" alt=""></figure>
+      <figure class="mission-card"><img id="mission2" class="media-placeholder" alt=""></figure>
+      <figure class="mission-card"><img id="mission3" class="media-placeholder" alt=""></figure>
+      <figure class="mission-card mission-card-wide"><img id="mission4" class="media-placeholder" alt=""></figure>
+    </div>
+  </section>
 
-<section id="contato" class="contact">
-  <div class="contact-inner reveal">
+  <section class="manifesto">
     <img src="assets/simbolo.png" alt="">
-    <p class="eyebrow">Vamos contar a sua história?</p><h2>Fale com a Soul</h2>
-    <p>Conte um pouco sobre seu evento. Será um prazer conhecer sua história.</p>
-    <div class="contact-actions">
-      <a class="btn" href="https://wa.me/5532988442521" target="_blank" rel="noopener">Conversar no WhatsApp</a>
-      <a href="https://www.instagram.com/soul.videohistorias/?hl=pt-br" target="_blank" rel="noopener">@soul.videohistorias</a>
-      <a href="https://www.instagram.com/soul15anos/?hl=pt-br" target="_blank" rel="noopener">@soul15anos</a>
+    <p>Imagem, memória e sentimento em movimento.</p>
+  </section>
+
+  <section id="galeria" class="section gallery">
+    <div class="section-heading reveal">
+      <p class="kicker">Portfólio</p>
+      <h2>Galeria</h2>
+      <p>Escolha uma categoria e descubra histórias que já tivemos a honra de contar.</p>
     </div>
-  </div>
-</section>
+
+    <div class="portfolio-tabs reveal" aria-label="Categorias do portfólio">
+      <button class="portfolio-tab active" data-category="Casamento">Casamentos</button>
+      <button class="portfolio-tab" data-category="15 anos">15 Anos</button>
+      <button class="portfolio-tab" data-category="Corporativo">Corporativo</button>
+    </div>
+    <div class="portfolio-subs reveal" id="portfolioSubs"></div>
+    <div id="portfolioContent" class="portfolio-content reveal">
+      <div class="empty-state">
+        <img src="assets/simbolo.png" alt="">
+        <h3>Histórias para sentir</h3>
+        <p>Escolha uma categoria acima para ver os eventos cadastrados.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="depoimentos" class="section testimonials">
+    <div class="section-heading reveal">
+      <p class="kicker">Palavras que ficam</p>
+      <h2>Depoimentos</h2>
+      <p>Quando uma história toca quem a viveu, nosso trabalho encontra sentido.</p>
+    </div>
+    <div id="testimonialsGrid" class="testimonial-grid reveal">
+      <p class="muted">Os depoimentos cadastrados no painel aparecerão aqui.</p>
+    </div>
+  </section>
+
+  <section id="contato" class="contact">
+    <div class="contact-inner reveal">
+      <img src="assets/simbolo.png" alt="">
+      <p class="kicker">Vamos contar a sua história?</p>
+      <h2>Seu momento merece permanecer.</h2>
+      <p>Conte um pouco sobre o seu evento. Será um prazer conhecer sua história e criar algo que tenha a sua verdade.</p>
+      <div class="contact-actions">
+        <a class="btn btn-light" id="contactWhatsapp" href="https://wa.me/5532988442521" target="_blank" rel="noopener">Conversar no WhatsApp</a>
+        <a id="contactInstagram" href="https://www.instagram.com/soul.videohistorias/" target="_blank" rel="noopener">@soul.videohistorias</a>
+        <a id="contactInstagram15" href="https://www.instagram.com/soul15anos/" target="_blank" rel="noopener">@soul15anos</a>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer><img src="assets/logo.png" alt="Soul Vídeo Histórias"><p>Filmes feitos para serem sentidos hoje e lembrados para sempre.</p><small>© <span id="year"></span> Soul Vídeo Histórias.</small></footer>
+<footer>
+  <img src="assets/logo.png" alt="Soul Vídeo Histórias">
+  <p>Histórias feitas para serem sentidas hoje e lembradas para sempre.</p>
+  <small>© <span id="year"></span> Soul Vídeo Histórias.</small>
+</footer>
 
 <script src="js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-(() => {
-  "use strict";
-
-  const cfg = window.SOUL_CONFIG || {};
-  const configured =
-    cfg.supabaseUrl &&
-    cfg.supabaseKey &&
-    !String(cfg.supabaseUrl).includes("COLE_") &&
-    !String(cfg.supabaseKey).includes("COLE_");
-
-  const db = configured ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey) : null;
-  const $ = (id) => document.getElementById(id);
-
-  $("year").textContent = new Date().getFullYear();
-
-  const mobileToggle = document.querySelector(".mobile-toggle");
-  const nav = document.querySelector(".nav");
-  if (mobileToggle && nav) {
-    mobileToggle.addEventListener("click", () => nav.classList.toggle("open"));
-  }
-
-  document.querySelectorAll(".accordion").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const submenu = btn.nextElementSibling;
-      submenu.classList.toggle("open");
-      const sign = btn.querySelector("span");
-      if (sign) sign.textContent = submenu.classList.contains("open") ? "−" : "+";
-    });
-  });
-
-  document.querySelectorAll(".submenu button").forEach((btn) => {
-    btn.addEventListener("click", () => loadPortfolio(btn.dataset.category, btn.dataset.sub));
-  });
-
-  function setImg(id, url) {
-    const el = $(id);
-    if (!el || !url) return;
-    el.src = url;
-    el.classList.remove("placeholder");
-  }
-
-  function youtubeId(url) {
-    if (!url) return "";
-    const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
-    return m ? m[1] : "";
-  }
-
-  async function loadHome() {
-    if (!db) return;
-    const { data, error } = await db
-      .from("home_content")
-      .select("*")
-      .eq("is_active", true)
-      .order("updated_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (error) { console.error("Início:", error); return; }
-    if (!data) return;
-
-    $("homeTitle").textContent = data.title || "";
-    $("homeText").textContent = data.text || "";
-
-    if (data.background_url) {
-      const hero = $("heroMedia");
-      if (/\.(mp4|webm|mov)(\?|$)/i.test(data.background_url)) {
-        hero.style.backgroundImage = "none";
-        hero.innerHTML = `<video autoplay muted loop playsinline preload="metadata" src="${data.background_url}"></video>`;
-      } else {
-        hero.innerHTML = "";
-        hero.style.backgroundImage = `url("${data.background_url}")`;
-      }
-    }
-  }
-
-  async function loadAbout() {
-    if (!db) return;
-    const { data, error } = await db
-      .from("about_content")
-      .select("*")
-      .eq("is_active", true)
-      .order("updated_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (error) { console.error("Quem Somos:", error); return; }
-    if (!data) return;
-
-    $("aboutTitle").textContent = data.title || "Quem Somos";
-    $("aboutText").textContent = data.text || "";
-    setImg("aboutLarge", data.photo_large_url);
-    setImg("about1", data.photo_1_url);
-    setImg("about2", data.photo_2_url);
-    setImg("about3", data.photo_3_url);
-  }
-
-  async function loadTestimonials() {
-    if (!db) return;
-    const { data, error } = await db
-      .from("testimonials")
-      .select("*")
-      .eq("is_published", true)
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false });
-
-    if (error) { console.error("Depoimentos:", error); return; }
-
-    const grid = $("testimonialsGrid");
-    if (!data || data.length === 0) {
-      grid.innerHTML = '<p class="muted">Os depoimentos cadastrados no painel aparecerão aqui.</p>';
-      return;
-    }
-
-    grid.innerHTML = data.map((t) => {
-      const media = t.media_url
-        ? (t.media_type === "video"
-          ? `<video src="${t.media_url}" controls playsinline preload="metadata"></video>`
-          : `<img src="${t.media_url}" alt="${t.client_name || "Depoimento"}" loading="lazy">`)
-        : "";
-
-      const horizontal = t.horizontal_photo_url
-        ? `<img src="${t.horizontal_photo_url}" alt="" loading="lazy" style="width:100%;aspect-ratio:16/9;object-fit:cover;margin-top:12px">`
-        : "";
-
-      return `
-        <article class="testimonial">
-          ${media}
-          <blockquote>“${t.testimonial_text || ""}”</blockquote>
-          <p>${t.client_name || ""}</p>
-          ${horizontal}
-        </article>`;
-    }).join("");
-  }
-
-  async function loadPortfolio(categoryName, subcategoryName) {
-    const area = $("portfolioContent");
-    document.querySelectorAll(".submenu button").forEach((x) => {
-      x.classList.toggle("active",
-        x.dataset.category === categoryName && x.dataset.sub === subcategoryName);
-    });
-
-    if (!db) {
-      area.innerHTML = '<div class="empty-state"><h3>Supabase não configurado</h3><p>Confira o arquivo js/config.js.</p></div>';
-      return;
-    }
-
-    area.innerHTML = '<p class="muted">Carregando histórias...</p>';
-
-    const { data: cats } = await db.from("portfolio_categories").select("id").eq("name", categoryName).limit(1);
-    if (!cats?.length) return showEmpty(area);
-
-    const { data: subs } = await db.from("portfolio_subcategories")
-      .select("id").eq("category_id", cats[0].id).eq("name", subcategoryName).limit(1);
-    if (!subs?.length) return showEmpty(area);
-
-    const { data: events, error } = await db.from("portfolio_events")
-      .select("*").eq("subcategory_id", subs[0].id).eq("is_published", true)
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false });
-
-    if (error || !events?.length) return showEmpty(area);
-
-    const html = [];
-    for (const event of events) {
-      const [{ data: videos }, { data: images }] = await Promise.all([
-        db.from("portfolio_videos").select("*").eq("event_id", event.id).eq("is_published", true).order("sort_order"),
-        db.from("portfolio_images").select("*").eq("event_id", event.id).order("sort_order").limit(4)
-      ]);
-
-      const vid = videos?.[0] ? youtubeId(videos[0].youtube_url) : "";
-
-      html.push(`
-        <article class="event">
-          <p class="eyebrow">${categoryName} · ${subcategoryName}</p>
-          <h3>${event.title || ""}</h3>
-          <p class="event-copy">${event.description || ""}</p>
-          ${vid ? `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen loading="lazy"></iframe></div>` : ""}
-          <div class="event-images">
-            ${(images || []).map(img => `<img src="${img.image_url}" alt="${img.alt_text || event.title || ""}" loading="lazy">`).join("")}
-          </div>
-        </article>
-      `);
-    }
-
-    area.innerHTML = html.join("");
-  }
-
-  function showEmpty(area) {
-    area.innerHTML = '<div class="empty-state"><h3>Nenhum evento cadastrado ainda</h3><p>Adicione eventos pelo painel administrativo.</p></div>';
-  }
-
-  async function refreshSite() {
-    await Promise.all([loadHome(), loadAbout(), loadTestimonials()]);
-  }
-
-  refreshSite();
-
-  // Atualiza ao voltar para a aba e também a cada 5 segundos.
-  window.addEventListener("focus", refreshSite);
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) refreshSite();
-  });
-  setInterval(refreshSite, 5000);
-
-})();
-</script>
-
-</body></html>
+<script src="js/site.js"></script>
+</body>
+</html>
