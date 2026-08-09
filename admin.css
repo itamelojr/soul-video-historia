@@ -1,3 +1,6 @@
+[hidden] {
+  display: none !important;
+}
 :root{
  --green:#203126;--green2:#304639;--beige:#f3eee4;--paper:#fbf9f4;--orange:#f5822a;--gray:#7e817d;--line:rgba(32,49,38,.15);
  --serif:"Cormorant Garamond",Georgia,serif;--sans:"Montserrat",Arial,sans-serif
