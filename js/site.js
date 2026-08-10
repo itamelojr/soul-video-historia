@@ -1,198 +1,585 @@
-(() => {
-  "use strict";
-  const cfg = window.SOUL_CONFIG || {};
-  const configured = cfg.supabaseUrl && cfg.supabaseKey &&
-    !String(cfg.supabaseUrl).includes("COLE_") &&
-    !String(cfg.supabaseKey).includes("COLE_");
-  const db = configured ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey) : null;
-  const $ = id => document.getElementById(id);
+const cfg = window.SOUL_CONFIG || {};
 
-  $("year").textContent = new Date().getFullYear();
+const ready =
+  cfg.supabaseUrl &&
+  !cfg.supabaseUrl.includes("COLE_") &&
+  cfg.supabaseKey &&
+  !cfg.supabaseKey.includes("COLE_");
 
-  const topbar = $("topbar");
-  window.addEventListener("scroll", () => topbar.classList.toggle("scrolled", window.scrollY > 20), {passive:true});
+const db = ready
+  ? supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey)
+  : null;
 
-  const toggle = $("mobileToggle"), nav = $("mainNav");
-  toggle.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(open));
-  });
-  nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => nav.classList.remove("open")));
 
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
-  }, {threshold:.08});
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+// ======================================================
+// ANO DO RODAPÉ
+// ======================================================
 
-  function esc(v=""){
-    return String(v).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
-  function setImg(id,url){
-    const el=$(id);
-    if(!el) return;
-    if(url){ el.src=url; el.style.visibility="visible"; }
-    else { el.removeAttribute("src"); el.style.visibility="hidden"; }
-  }
-  function youtubeId(url){
-    if(!url) return "";
-    const m=String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
-    return m ? m[1] : "";
-  }
-  function setHeroMedia(url){
-    if(!url) return;
-    const hero=$("heroMedia");
-    if(/\.(mp4|webm|mov)(\?|$)/i.test(url)){
-      hero.style.backgroundImage="none";
-      hero.innerHTML=`<video autoplay muted loop playsinline preload="metadata" src="${esc(url)}"></video>`;
-    }else{
-      hero.innerHTML="";
-      hero.style.backgroundImage=`url("${url.replace(/"/g,"%22")}")`;
+const yearElement = document.getElementById("year");
+
+if (yearElement) {
+  yearElement.textContent = new Date().getFullYear();
+}
+
+
+// ======================================================
+// MENU MOBILE
+// ======================================================
+
+const mobileToggle = document.querySelector(".mobile-toggle");
+
+if (mobileToggle) {
+  mobileToggle.onclick = () => {
+    const nav = document.querySelector(".nav");
+
+    if (nav) {
+      nav.classList.toggle("open");
     }
-  }
-
-  async function loadHome(){
-    if(!db) return;
-    const {data,error}=await db.from("home_content").select("*").eq("is_active",true).order("updated_at",{ascending:false}).limit(1).maybeSingle();
-    if(error){console.error(error);return}
-    if(!data)return;
-    $("homeTitle").textContent=data.title||"Histórias que o tempo não apaga.";
-    $("homeText").textContent=data.text||"";
-    setHeroMedia(data.background_url);
-  }
-
-  async function loadAbout(){
-    if(!db)return;
-    const {data,error}=await db.from("about_content").select("*").eq("is_active",true).order("updated_at",{ascending:false}).limit(1).maybeSingle();
-    if(error){console.error(error);return}
-    if(!data)return;
-    $("aboutTitle").textContent=data.title||"Quem Somos";
-    $("aboutText").textContent=data.text||"";
-    setImg("aboutLarge",data.photo_large_url);
-    setImg("about1",data.photo_1_url);
-    setImg("about2",data.photo_2_url);
-    setImg("about3",data.photo_3_url);
-  }
-
-  async function loadMission(){
-    if(!db)return;
-    const {data,error}=await db.from("mission_content").select("*").eq("is_active",true).order("updated_at",{ascending:false}).limit(1).maybeSingle();
-    if(error){console.warn("Missão:",error.message);return}
-    if(!data)return;
-    $("missionTitle").textContent=data.title||"Nossa Missão";
-    $("missionText").textContent=data.text||"";
-    setImg("mission1",data.photo_1_url);
-    setImg("mission2",data.photo_2_url);
-    setImg("mission3",data.photo_3_url);
-    setImg("mission4",data.photo_4_url);
-  }
-
-  async function loadSettings(){
-    if(!db)return;
-    const {data,error}=await db.from("site_settings").select("*").eq("id",1).maybeSingle();
-    if(error || !data)return;
-    if(data.whatsapp_url){
-      $("topWhatsapp").href=data.whatsapp_url;
-      $("contactWhatsapp").href=data.whatsapp_url;
-    }
-    if(data.instagram_url){
-      $("contactInstagram").href=data.instagram_url;
-      $("contactInstagram").textContent=data.instagram_label||"@soul.videohistorias";
-    }
-    if(data.instagram_15_url){
-      $("contactInstagram15").href=data.instagram_15_url;
-      $("contactInstagram15").textContent=data.instagram_15_label||"@soul15anos";
-    }
-  }
-
-  const subMap={
-    "Casamento":["Teaser","Save the Date"],
-    "15 anos":["Teaser","Save the Date"],
-    "Corporativo":["Filmes","Eventos"]
   };
-  let selectedCategory="Casamento", selectedSub="Teaser";
+}
 
-  function renderSubs(){
-    const box=$("portfolioSubs");
-    const items=subMap[selectedCategory]||[];
-    if(!items.includes(selectedSub)) selectedSub=items[0]||"";
-    box.innerHTML=items.map(s=>`<button class="portfolio-sub ${s===selectedSub?"active":""}" data-sub="${esc(s)}">${esc(s)}</button>`).join("");
-    box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
-      selectedSub=b.dataset.sub; renderSubs(); loadPortfolio(selectedCategory,selectedSub);
-    });
-  }
 
-  document.querySelectorAll(".portfolio-tab").forEach(btn=>btn.onclick=()=>{
-    document.querySelectorAll(".portfolio-tab").forEach(b=>b.classList.toggle("active",b===btn));
-    selectedCategory=btn.dataset.category;
-    selectedSub=(subMap[selectedCategory]||[])[0]||"";
-    renderSubs(); loadPortfolio(selectedCategory,selectedSub);
-  });
+// ======================================================
+// ACORDEÃO DA GALERIA
+// ======================================================
 
-  function showEmpty(area,msg="Ainda não há histórias cadastradas nesta categoria."){
-    area.innerHTML=`<div class="empty-state"><img src="assets/simbolo.png" alt=""><h3>Em breve</h3><p>${esc(msg)}</p></div>`;
-  }
+document.querySelectorAll(".accordion").forEach((button) => {
+  button.onclick = () => {
+    const submenu = button.nextElementSibling;
 
-  async function loadPortfolio(categoryName,subcategoryName){
-    const area=$("portfolioContent");
-    if(!db){showEmpty(area,"Supabase não configurado.");return}
-    area.innerHTML='<p class="muted">Carregando histórias...</p>';
+    if (!submenu) return;
 
-    const {data:cats,error:catErr}=await db.from("portfolio_categories").select("id").eq("name",categoryName).limit(1);
-    if(catErr || !cats?.length){showEmpty(area);return}
-    const {data:subs,error:subErr}=await db.from("portfolio_subcategories").select("id").eq("category_id",cats[0].id).eq("name",subcategoryName).limit(1);
-    if(subErr || !subs?.length){showEmpty(area);return}
+    submenu.classList.toggle("open");
 
-    const {data:events,error}=await db.from("portfolio_events")
-      .select("id,title,description,created_at")
-      .eq("subcategory_id",subs[0].id)
-      .order("created_at",{ascending:false});
-    if(error || !events?.length){showEmpty(area);return}
+    const signal = button.querySelector("span");
 
-    const ids=events.map(e=>e.id);
-    const [{data:videos},{data:images}]=await Promise.all([
-      db.from("portfolio_videos").select("*").in("event_id",ids).order("sort_order",{ascending:true}),
-      db.from("portfolio_images").select("*").in("event_id",ids).order("sort_order",{ascending:true})
-    ]);
+    if (signal) {
+      signal.textContent = submenu.classList.contains("open")
+        ? "−"
+        : "+";
+    }
+  };
+});
 
-    area.innerHTML=events.map(ev=>{
-      const evVideos=(videos||[]).filter(v=>v.event_id===ev.id);
-      const evImages=(images||[]).filter(i=>i.event_id===ev.id);
-      const videoHtml=evVideos.map(v=>{
-        const yid=youtubeId(v.youtube_url);
-        return yid ? `<div class="video-frame"><iframe loading="lazy" src="https://www.youtube.com/embed/${esc(yid)}" title="${esc(ev.title)}" allowfullscreen></iframe></div>` : "";
-      }).join("");
-      const photos=evImages.map(i=>`<img loading="lazy" src="${esc(i.image_url)}" alt="${esc(ev.title)}">`).join("");
-      return `<article class="event-card">
-        <div class="event-header"><h3>${esc(ev.title||"História")}</h3><p>${esc(ev.description||"")}</p></div>
-        ${videoHtml?`<div class="video-grid">${videoHtml}</div>`:""}
-        ${photos?`<div class="photo-grid">${photos}</div>`:""}
-      </article>`;
-    }).join("");
-  }
 
-  async function loadTestimonials(){
-    if(!db)return;
-    const {data,error}=await db.from("testimonials").select("*").eq("is_published",true).order("sort_order",{ascending:true}).order("created_at",{ascending:false});
-    if(error){console.error(error);return}
-    const grid=$("testimonialsGrid");
-    if(!data?.length){grid.innerHTML='<p class="muted">Os depoimentos cadastrados no painel aparecerão aqui.</p>';return}
-    grid.innerHTML=data.map(t=>{
-      let media="";
-      if(t.media_url){
-        media=t.media_type==="video"
-          ? `<video src="${esc(t.media_url)}" controls playsinline preload="metadata"></video>`
-          : `<img src="${esc(t.media_url)}" alt="${esc(t.client_name||"Depoimento")}" loading="lazy">`;
+// ======================================================
+// BOTÕES DAS CATEGORIAS
+// ======================================================
+
+document.querySelectorAll(".submenu button").forEach((button) => {
+  button.onclick = () => {
+    loadPortfolio(
+      button.dataset.category,
+      button.dataset.sub
+    );
+  };
+});
+
+
+// ======================================================
+// IDENTIFICAR ID DO YOUTUBE
+// ======================================================
+
+function youtubeId(url) {
+  if (!url) return "";
+
+  try {
+    const value = url.trim();
+
+    const patterns = [
+      /youtu\.be\/([^?&/]+)/i,
+      /youtube\.com\/watch\?v=([^?&/]+)/i,
+      /youtube\.com\/embed\/([^?&/]+)/i,
+      /youtube\.com\/shorts\/([^?&/]+)/i,
+      /youtube\.com\/live\/([^?&/]+)/i
+    ];
+
+    for (const pattern of patterns) {
+      const match = value.match(pattern);
+
+      if (match && match[1]) {
+        return match[1];
       }
-      const horizontal=t.horizontal_photo_url?`<img class="horizontal-photo" src="${esc(t.horizontal_photo_url)}" alt="" loading="lazy">`:"";
-      return `<article class="testimonial">${media}<blockquote>“${esc(t.testimonial_text||"")}”</blockquote><p class="client">${esc(t.client_name||"")}</p>${horizontal}</article>`;
-    }).join("");
+    }
+
+    return "";
+  } catch (error) {
+    console.error("Erro ao identificar vídeo do YouTube:", error);
+    return "";
+  }
+}
+
+
+// ======================================================
+// COLOCAR IMAGEM
+// ======================================================
+
+function setImg(id, url) {
+  const element = document.getElementById(id);
+
+  if (!element || !url) return;
+
+  element.src = url;
+  element.classList.remove("placeholder");
+}
+
+
+// ======================================================
+// CARREGAMENTO PRINCIPAL
+// ======================================================
+
+async function loadBase() {
+  if (!db) return;
+
+  // HOME
+  const { data: home, error: homeError } = await db
+    .from("home_content")
+    .select("*")
+    .eq("is_active", true)
+    .limit(1)
+    .maybeSingle();
+
+  if (homeError) {
+    console.error("Erro ao carregar Início:", homeError);
   }
 
-  renderSubs();
-  loadHome();
-  loadAbout();
-  loadMission();
-  loadSettings();
+  if (home) {
+    const homeTitle = document.getElementById("homeTitle");
+    const homeText = document.getElementById("homeText");
+    const heroMedia = document.getElementById("heroMedia");
+
+    if (homeTitle && home.title) {
+      homeTitle.textContent = home.title;
+    }
+
+    if (homeText && home.text) {
+      homeText.textContent = home.text;
+    }
+
+    if (heroMedia && home.background_url) {
+      if (/\.(mp4|webm|mov)(\?|$)/i.test(home.background_url)) {
+        heroMedia.innerHTML = `
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            src="${home.background_url}">
+          </video>
+        `;
+      } else {
+        heroMedia.style.backgroundImage =
+          `url("${home.background_url}")`;
+      }
+    }
+  }
+
+
+  // QUEM SOMOS
+  const { data: about, error: aboutError } = await db
+    .from("about_content")
+    .select("*")
+    .eq("is_active", true)
+    .limit(1)
+    .maybeSingle();
+
+  if (aboutError) {
+    console.error("Erro ao carregar Quem Somos:", aboutError);
+  }
+
+  if (about) {
+    const aboutTitle = document.getElementById("aboutTitle");
+    const aboutText = document.getElementById("aboutText");
+
+    if (aboutTitle) {
+      aboutTitle.textContent =
+        about.title || "Quem Somos";
+    }
+
+    if (aboutText) {
+      aboutText.textContent =
+        about.text || "";
+    }
+
+    setImg("aboutLarge", about.photo_large_url);
+    setImg("about1", about.photo_1_url);
+    setImg("about2", about.photo_2_url);
+    setImg("about3", about.photo_3_url);
+  }
+
+
   loadTestimonials();
-  loadPortfolio(selectedCategory,selectedSub);
-})();
+}
+
+
+// ======================================================
+// GALERIA / PORTFÓLIO
+// ======================================================
+
+async function loadPortfolio(category, subcategory) {
+  document
+    .querySelectorAll(".submenu button")
+    .forEach((button) => {
+      button.classList.toggle(
+        "active",
+        button.dataset.category === category &&
+        button.dataset.sub === subcategory
+      );
+    });
+
+  const portfolioContent =
+    document.getElementById("portfolioContent");
+
+  if (!portfolioContent) return;
+
+  portfolioContent.innerHTML =
+    "<p class='muted'>Carregando histórias...</p>";
+
+
+  if (!db) {
+    portfolioContent.innerHTML = `
+      <div class="empty-state">
+        <h3>Conecte o Supabase</h3>
+        <p>Preencha js/config.js para carregar os eventos.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  // LOCALIZA A CATEGORIA
+  const {
+    data: categories,
+    error: categoryError
+  } = await db
+    .from("portfolio_categories")
+    .select("id")
+    .eq("name", category)
+    .limit(1);
+
+  if (categoryError) {
+    console.error(
+      "Erro ao carregar categoria:",
+      categoryError
+    );
+
+    return empty();
+  }
+
+  if (!categories?.length) {
+    return empty();
+  }
+
+
+  // LOCALIZA A SUBCATEGORIA
+  const {
+    data: subcategories,
+    error: subcategoryError
+  } = await db
+    .from("portfolio_subcategories")
+    .select("id")
+    .eq("category_id", categories[0].id)
+    .eq("name", subcategory)
+    .limit(1);
+
+  if (subcategoryError) {
+    console.error(
+      "Erro ao carregar subcategoria:",
+      subcategoryError
+    );
+
+    return empty();
+  }
+
+  if (!subcategories?.length) {
+    return empty();
+  }
+
+
+  // BUSCA OS EVENTOS
+  const {
+    data: events,
+    error: eventsError
+  } = await db
+    .from("portfolio_events")
+    .select("*")
+    .eq(
+      "subcategory_id",
+      subcategories[0].id
+    )
+    .eq("is_published", true)
+    .order("sort_order", {
+      ascending: true
+    });
+
+  if (eventsError) {
+    console.error(
+      "Erro ao carregar eventos:",
+      eventsError
+    );
+
+    return empty();
+  }
+
+  if (!events?.length) {
+    return empty();
+  }
+
+
+  let html = "";
+
+
+  // ====================================================
+  // CADA EVENTO
+  // ====================================================
+
+  for (const event of events) {
+
+    // BUSCA TODOS OS VÍDEOS DO EVENTO
+    const {
+      data: videos,
+      error: videosError
+    } = await db
+      .from("portfolio_videos")
+      .select("*")
+      .eq("event_id", event.id)
+      .eq("is_published", true)
+      .order("sort_order", {
+        ascending: true
+      });
+
+    if (videosError) {
+      console.error(
+        `Erro ao carregar vídeos do evento ${event.title}:`,
+        videosError
+      );
+    }
+
+
+    // BUSCA AS FOTOS
+    const {
+      data: images,
+      error: imagesError
+    } = await db
+      .from("portfolio_images")
+      .select("*")
+      .eq("event_id", event.id)
+      .order("sort_order", {
+        ascending: true
+      })
+      .limit(4);
+
+    if (imagesError) {
+      console.error(
+        `Erro ao carregar imagens do evento ${event.title}:`,
+        imagesError
+      );
+    }
+
+
+    // ================================================
+    // CORREÇÃO:
+    // RENDERIZA TODOS OS VÍDEOS DO EVENTO
+    // ================================================
+
+    const videosHtml = (videos || [])
+      .map((video) => {
+
+        const id = youtubeId(
+          video.youtube_url
+        );
+
+        if (!id) {
+          console.warn(
+            "Link do YouTube não reconhecido:",
+            video.youtube_url
+          );
+
+          return "";
+        }
+
+        return `
+          <div class="video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/${id}"
+              title="${event.title || "Vídeo"}"
+              loading="lazy"
+              frameborder="0"
+              allow="
+                accelerometer;
+                autoplay;
+                clipboard-write;
+                encrypted-media;
+                gyroscope;
+                picture-in-picture;
+                web-share
+              "
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen>
+            </iframe>
+          </div>
+        `;
+      })
+      .join("");
+
+
+    // FOTOS
+    const imagesHtml = (images || [])
+      .map((image) => {
+        return `
+          <img
+            src="${image.image_url}"
+            alt="${image.alt_text || event.title || "Evento"}"
+            loading="lazy"
+          >
+        `;
+      })
+      .join("");
+
+
+    // EVENTO COMPLETO
+    html += `
+      <article class="event">
+
+        <p class="eyebrow">
+          ${category} · ${subcategory}
+        </p>
+
+        <h3>
+          ${event.title || ""}
+        </h3>
+
+        <p class="event-copy">
+          ${event.description || ""}
+        </p>
+
+        ${videosHtml}
+
+        ${
+          imagesHtml
+            ? `
+              <div class="event-images">
+                ${imagesHtml}
+              </div>
+            `
+            : ""
+        }
+
+      </article>
+    `;
+  }
+
+
+  portfolioContent.innerHTML = html;
+}
+
+
+// ======================================================
+// ESTADO VAZIO
+// ======================================================
+
+function empty() {
+  const portfolioContent =
+    document.getElementById("portfolioContent");
+
+  if (!portfolioContent) return;
+
+  portfolioContent.innerHTML = `
+    <div class="empty-state">
+      <h3>Nenhum evento cadastrado ainda</h3>
+      <p>
+        Adicione eventos pelo painel administrativo.
+      </p>
+    </div>
+  `;
+}
+
+
+// ======================================================
+// DEPOIMENTOS
+// ======================================================
+
+async function loadTestimonials() {
+  if (!db) return;
+
+  const testimonialsGrid =
+    document.getElementById("testimonialsGrid");
+
+  if (!testimonialsGrid) return;
+
+  const {
+    data,
+    error
+  } = await db
+    .from("testimonials")
+    .select("*")
+    .eq("is_published", true)
+    .order("sort_order", {
+      ascending: true
+    });
+
+  if (error) {
+    console.error(
+      "Erro ao carregar depoimentos:",
+      error
+    );
+
+    return;
+  }
+
+  if (!data?.length) return;
+
+  testimonialsGrid.innerHTML = data
+    .map((testimonial) => {
+
+      let media = "";
+
+      if (testimonial.media_url) {
+
+        if (
+          testimonial.media_type === "video"
+        ) {
+          media = `
+            <video
+              src="${testimonial.media_url}"
+              controls
+              playsinline>
+            </video>
+          `;
+        } else {
+          media = `
+            <img
+              src="${testimonial.media_url}"
+              alt="${testimonial.client_name || "Depoimento"}"
+              loading="lazy"
+            >
+          `;
+        }
+      }
+
+      return `
+        <article class="testimonial">
+
+          ${media}
+
+          <blockquote>
+            “${testimonial.testimonial_text || ""}”
+          </blockquote>
+
+          <p>
+            ${testimonial.client_name || ""}
+          </p>
+
+        </article>
+      `;
+    })
+    .join("");
+}
+
+
+// ======================================================
+// INICIAR SITE
+// ======================================================
+
+loadBase();
